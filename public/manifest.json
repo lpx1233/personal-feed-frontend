@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "My Personal Feed",
+  "name": "A personal feed for myself with tech news",
   "icons": [
     {
       "src": "favicon.ico",

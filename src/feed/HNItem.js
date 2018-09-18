@@ -63,9 +63,9 @@ class HNItem extends React.Component {
           <Button size="small" href={this.props.url} target="_blank">visit</Button>
           <Button size="small" href={'https://news.ycombinator.com/item?id=' + this.props.id} target="_blank">
             {(() => { switch(this.props.comments) {
-            case 0: return 'discuss';
-            case 1: return '1 comment';
-            default: return this.props.comments + ' comments';
+              case 0: return 'discuss';
+              case 1: return '1 comment';
+              default: return this.props.comments + ' comments';
             }})()}
           </Button>
         </CardActions>
@@ -81,7 +81,7 @@ HNItem.propTypes = {
   title: PropTypes.string.isRequired,
   point: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,
-  time: PropTypes.object.isRequired,
+  time: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   comments: PropTypes.number.isRequired,
 };
