@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
+import moment from 'moment';
 
 const styles = {
   card: {
@@ -24,6 +25,7 @@ const styles = {
   }
 };
 
+// TODO: handle undefined props
 class HNItem extends React.Component {
   state = {
     raised: false,
@@ -49,13 +51,15 @@ class HNItem extends React.Component {
           <Grid container className={classes.point_time}>
             <Grid item xs>
               <Typography component="p">
-                {this.props.point} points
+                {this.props.score} points
               </Typography>
             </Grid>
             <Grid item xs>
-              <Typography component="p">
-                {this.props.time}
-              </Typography>
+              {this.props.time !== undefined && 
+                <Typography component="p">
+                  {moment.unix(this.props.time).fromNow()}
+                </Typography>
+              }
             </Grid>
           </Grid>
         </CardContent>
@@ -78,12 +82,12 @@ HNItem.propTypes = {
   classes: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
   source: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  point: PropTypes.number.isRequired,
-  author: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  comments: PropTypes.number.isRequired,
+  title: PropTypes.string,
+  score: PropTypes.number,
+  author: PropTypes.string,
+  time: PropTypes.number,
+  url: PropTypes.string,
+  comments: PropTypes.number,
 };
 
 export default withStyles(styles)(HNItem);
