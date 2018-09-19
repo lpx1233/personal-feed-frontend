@@ -25,7 +25,6 @@ const styles = {
   }
 };
 
-// TODO: handle undefined props
 class HNItem extends React.Component {
   state = {
     raised: false,
@@ -42,20 +41,26 @@ class HNItem extends React.Component {
           <Typography className={classes.source}>
             {this.props.source}
           </Typography>
-          <Typography variant="headline" component="h2">
-            {this.props.title}
-          </Typography>
-          <Typography className={classes.author} component="p">
-            {this.props.author}
-          </Typography>
+          {this.props.title !== undefined &&
+            <Typography variant="headline" component="h2">
+              {this.props.title}
+            </Typography>
+          }
+          {this.props.author !== undefined &&
+            <Typography className={classes.author} component="p">
+              {this.props.author}
+            </Typography>
+          }
           <Grid container className={classes.point_time}>
             <Grid item xs>
-              <Typography component="p">
-                {this.props.score} points
-              </Typography>
+              {this.props.score !== undefined &&
+                <Typography component="p">
+                  {this.props.score} points
+                </Typography>
+              }
             </Grid>
             <Grid item xs>
-              {this.props.time !== undefined && 
+              {this.props.time !== undefined &&
                 <Typography component="p">
                   {moment.unix(this.props.time).fromNow()}
                 </Typography>
@@ -64,14 +69,19 @@ class HNItem extends React.Component {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button size="small" href={this.props.url} target="_blank">visit</Button>
           <Button size="small" href={'https://news.ycombinator.com/item?id=' + this.props.id} target="_blank">
             {(() => { switch(this.props.comments) {
+              case undefined:
               case 0: return 'discuss';
               case 1: return '1 comment';
               default: return this.props.comments + ' comments';
             }})()}
           </Button>
+          {this.props.url !== undefined &&
+            <Button size="small" href={this.props.url} target="_blank">
+              visit url
+            </Button>
+          }
         </CardActions>
       </Card>
     );

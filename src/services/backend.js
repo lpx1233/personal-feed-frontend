@@ -37,7 +37,7 @@ export const fetchItemsByIdsEpic = action$ => action$.pipe(
       author: item.by,
       time: item.time,
       url: item.url,
-      comments: item.kids == null ? undefined : item.kids.length,
+      comments: item.kids !== undefined ? item.kids.length : undefined,
     };
   })))
 );

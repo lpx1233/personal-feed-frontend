@@ -50,17 +50,6 @@ const CLEAR_ITEMS = 'my-personal-feed/feed/CLEAR_ITEMS';
 const APPEND_ITEMS = 'my-personal-feed/feed/APPEND_ITEM';
 const SET_TOP_STORIES = 'my-personal-feed/feed/SET_TOP_STORIES';
 
-// const mochHNItem = {
-//   id: 17977698,
-//   source: 'Hacker News',
-//   title: 'Yarn Plug\'n\'Play: Getting rid of node_modules',
-//   point: 213,
-//   author: 'Couto',
-//   time: 1536794872,
-//   url: 'https://github.com/yarnpkg/rfcs/pull/101',
-//   comments: 2,
-// };
-
 const initialState = {
   itemList: [],
   topStories: [],
