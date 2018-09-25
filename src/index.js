@@ -9,7 +9,6 @@ import registerServiceWorker from './registerServiceWorker';
 import { feedReducer } from './feed/Feed';
 import { setTopStoriesEpic } from './feed/Feed';
 import { fetchTopStoriesEpic, fetchItemsByIdsEpic } from './services/backend';
-import { fetchTopStories } from './services/backend';
 
 const rootEpic = combineEpics(
   fetchTopStoriesEpic,
@@ -32,4 +31,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'));
 registerServiceWorker();
-store.dispatch(fetchTopStories());

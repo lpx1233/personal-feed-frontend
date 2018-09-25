@@ -3,17 +3,24 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { map } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
-import { Grid } from '@material-ui/core';
+import { Grid, Button, LinearProgress } from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { connect } from 'react-redux';
 import HNItem from './HNItem';
-import { fetchItemsByIds } from '../services/backend';
+import { fetchTopStories, fetchItemsByIds } from '../services/backend';
+import { FETCH_TOP_STORIES } from '../services/backend';
 
 // react UI part
-const styles = () => ({
-  root: {
+const styles = theme => ({
+  grid: {
     flexWrap: 'wrap',
-    padding: 24,
-  }
+  },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 4,
+    right: theme.spacing.unit * 4,
+    color: theme.palette.secondary,
+  },
 });
 
 class Feed extends React.Component {
@@ -28,13 +35,37 @@ class Feed extends React.Component {
       </Grid>
     ));
   }
+  
+  componentDidMount() {
+    this.props.refresh();
+  }
 
   render() {
     const { classes } = this.props;
     return (
-      <Grid container className={classes.root} spacing={24}>
-        {this.renderItems(this.props.itemList)}
-      </Grid>
+      <div>
+        <LinearProgress color="secondary" hidden={!this.props.fetching}/>
+        <div style={{ padding: 24 }}>
+          <Grid container className={classes.grid} spacing={24}>
+            {this.renderItems(this.props.itemList)}
+          </Grid>
+        </div>
+        <Button
+          variant="fab"
+          className={classes.fab}
+          color='secondary'
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: 'smooth',
+            });
+            this.props.refresh();
+          }}
+        >
+          <RefreshIcon />
+        </Button>
+      </div>
     );
   }
 }
@@ -46,21 +77,17 @@ Feed.propTypes = {
 const FeedWithStyle = withStyles(styles)(Feed);
 
 // redux logic part
-const CLEAR_ITEMS = 'my-personal-feed/feed/CLEAR_ITEMS';
-const APPEND_ITEMS = 'my-personal-feed/feed/APPEND_ITEM';
+const ADD_ITEMS = 'my-personal-feed/feed/ADD_ITEMS';
 const SET_TOP_STORIES = 'my-personal-feed/feed/SET_TOP_STORIES';
 
 const initialState = {
   itemList: [],
   topStories: [],
+  fetching: false,
 };
 
-export function clearItems() {
-  return { type: CLEAR_ITEMS };
-}
-
-export function appendItems(items) {
-  return { type: APPEND_ITEMS, items };
+export function addItems(items, appendToEnd = false, clearPrevious = false) {
+  return { type: ADD_ITEMS, items, appendToEnd, clearPrevious };
 }
 
 export function setTopStories(topStories) {
@@ -69,22 +96,29 @@ export function setTopStories(topStories) {
 
 export const setTopStoriesEpic = action$ => action$.pipe(
   ofType(SET_TOP_STORIES),
-  map(action => fetchItemsByIds(action.topStories.slice(0, 10))),
+  map(action => fetchItemsByIds(
+    action.topStories.slice(0, 10),
+    { appendToEnd: false, clearPrevious: true }
+  )),
 );
 
 export function feedReducer(state = initialState, action) {
   switch (action.type) {
-    case CLEAR_ITEMS:
+    case ADD_ITEMS:
+      var itemList = action.clearPrevious ? [] : state.itemList;
+      itemList = action.appendToEnd ?
+        [...itemList, ...action.items] : [...action.items, ...itemList];
       return Object.assign({}, state, {
-        itemList: [],
-      });
-    case APPEND_ITEMS:
-      return Object.assign({}, state, {
-        itemList: [...state.itemList, ...action.items],
+        itemList: itemList,
+        fetching: false,
       });
     case SET_TOP_STORIES:
       return Object.assign({}, state, {
         topStories: action.topStories,
+      });
+    case FETCH_TOP_STORIES:
+      return Object.assign({}, state, {
+        fetching: true,
       });
     default:
       return state;
@@ -96,14 +130,15 @@ function mapStateToProps(state) {
   return {
     itemList: state.feed.itemList,
     topStories: state.feed.topStories,
+    fetching: state.feed.fetching,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearItems: () => dispatch(clearItems()),
-    appendItems: (items) => dispatch(appendItems(items)),
+    appendItems: (items) => dispatch(addItems(items)),
     setTopStories: (topStories) => dispatch(setTopStories(topStories)),
+    refresh: () => dispatch(fetchTopStories()),
   };
 }
 
