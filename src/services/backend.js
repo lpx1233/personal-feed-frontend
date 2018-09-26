@@ -20,7 +20,7 @@ export const fetchTopStoriesEpic = action$ => action$.pipe(
 // fetch items
 export const FETCH_ITEMS_BY_IDS = 'my-personal-feed/services/FETCH_ITEMS_BY_IDS';
 export function fetchItemsByIds(ids,
-  addItemsParams = {appendToEnd: false, clearPrevious: false}) {
+  addItemsParams = { appendToEnd: false, clearPrevious: false, currIdx: 0 }) {
   return {type: FETCH_ITEMS_BY_IDS, ids, addItemsParams};
 }
 export const fetchItemsByIdsEpic = action$ => action$.pipe(
@@ -45,6 +45,7 @@ export const fetchItemsByIdsEpic = action$ => action$.pipe(
       comments: item.kids !== undefined ? item.kids.length : undefined,
     })),
     addItemsParams.appendToEnd,
-    addItemsParams.clearPrevious
+    addItemsParams.clearPrevious,
+    addItemsParams.currIdx,
   )),
 );

@@ -7,12 +7,16 @@ import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { feedReducer } from './feed/Feed';
-import { setTopStoriesEpic } from './feed/Feed';
+import { loadMoreEpic, refreshEpic, setTopStoriesEpic } from './feed/Feed';
 import { fetchTopStoriesEpic, fetchItemsByIdsEpic } from './services/backend';
 
 const rootEpic = combineEpics(
+  // backend
   fetchTopStoriesEpic,
   fetchItemsByIdsEpic,
+  // Feed
+  refreshEpic,
+  loadMoreEpic,
   setTopStoriesEpic,
 );
 const rootReducer = combineReducers({

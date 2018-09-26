@@ -2,8 +2,7 @@
 [![Build Status](https://travis-ci.org/lpx1233/personal-feed-frontend.svg?branch=master)](https://travis-ci.org/lpx1233/personal-feed-frontend)
 
 ## TODOs
-* Scroll down to load more (like infinite scrolling)
-* Function like *Favorite* or *Read Next*
+* Another tab of *Favorite* or *Read Next*
 
 ## Tech Stack
 * react
