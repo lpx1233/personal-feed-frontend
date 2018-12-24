@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/lpx1233/personal-feed-frontend.svg?branch=master)](https://travis-ci.org/lpx1233/personal-feed-frontend)
 
 ## TODOs
+* Migrate to backend GraphQL API using Apollo (and eliminate redux-related code)
 * Another tab of *Favorite* or *Read Next*
 
 ## Tech Stack
@@ -14,3 +15,4 @@
 * axios
 * moment
 * rxjs
+* apollo
