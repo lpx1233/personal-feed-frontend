@@ -1,14 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import logger from 'redux-logger';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
+
+import { ApolloProvider } from 'react-apollo';
+
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { feedReducer } from './feed/Feed';
 import { loadMoreEpic, refreshEpic, setTopStoriesEpic } from './feed/Feed';
 import { fetchTopStoriesEpic, fetchItemsByIdsEpic } from './services/backend';
+import { client } from './services/GraphQLBackend';
 
 const rootEpic = combineEpics(
   // backend
@@ -30,8 +35,11 @@ export const store = createStore(
 epicMiddleware.run(rootEpic);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root'));
+
 registerServiceWorker();

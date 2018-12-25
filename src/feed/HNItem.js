@@ -39,7 +39,7 @@ class HNItem extends React.Component {
       >
         <CardContent>
           <Typography className={classes.source}>
-            {this.props.source}
+            Hacker News
           </Typography>
           {this.props.title !== undefined &&
             <Typography variant="headline" component="h2">
@@ -91,7 +91,7 @@ class HNItem extends React.Component {
 HNItem.propTypes = {
   classes: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
-  source: PropTypes.string.isRequired,
+  source: PropTypes.string,
   title: PropTypes.string,
   score: PropTypes.number,
   author: PropTypes.string,
