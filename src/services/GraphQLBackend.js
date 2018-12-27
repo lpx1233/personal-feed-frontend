@@ -9,7 +9,17 @@ persistCache({
   storage: window.localStorage,
 });
 
+// local state management
+const defaults = {
+  userID: 0,
+  readBefore: [],
+};
+
 export const client = new ApolloClient({
   cache,
-  uri: 'http://52.221.217.26:8080/graphql'
+  uri: 'http://52.221.217.26:8080/graphql',
+  clientState: {
+    defaults,
+    // resolver & typedef are omitted now
+  }
 });

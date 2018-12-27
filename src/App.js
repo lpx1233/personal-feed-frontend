@@ -6,15 +6,18 @@ import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/Inbox';
 import Divider from '@material-ui/core/Divider';
-import Feed from './feed/Feed';
+import InboxIcon from '@material-ui/icons/Inbox';
+import MenuIcon from '@material-ui/icons/Menu';
+import PersonIcon from '@material-ui/icons/Person';
+import CloudIcon from '@material-ui/icons/Cloud';
+// import Feed from './feed/Feed';
+import TopStories from './feed/TopStories';
 
 const styles = theme => ({
   root: {
@@ -28,7 +31,7 @@ const styles = theme => ({
     marginRight: 20,
   },
   sideNav: {
-    width: 250,
+    width: 300,
   },
   toolbar: {
     ...theme.mixins.toolbar,
@@ -44,6 +47,7 @@ const styles = theme => ({
 class App extends React.Component {
   state = {
     sideNav: false,
+    activeTab: 0,
   };
 
   toggleDrawer = (open) => () => {
@@ -58,7 +62,7 @@ class App extends React.Component {
     const sideNavList = (
       <div className={classes.sideNav}>
         <div className={classes.toolbar}>
-          <Typography variant="title" align="center">
+          <Typography variant="h6" align="center">
             Personal Feed
           </Typography>
         </div>
@@ -70,11 +74,35 @@ class App extends React.Component {
             onClick={this.toggleDrawer(false)}
             onKeyDown={this.toggleDrawer(false)}
           >
-            <ListItem button selected>
+            <ListItem
+              button
+              selected={this.state.activeTab === 0}
+              onClick={() => this.setState({ activeTab: 0 })}
+            >
+              <ListItemIcon>
+                <CloudIcon />
+              </ListItemIcon>
+              <ListItemText primary="Top Stories"/>
+            </ListItem>
+            <ListItem
+              button
+              selected={this.state.activeTab === 1}
+              onClick={() => this.setState({ activeTab: 1 })}
+            >
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Feed"/>
+              <ListItemText primary="Recommended For You"/>
+            </ListItem>
+            <ListItem
+              button
+              selected={this.state.activeTab === 2}
+              onClick={() => this.setState({ activeTab: 2 })}
+            >
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="About Me"/>
             </ListItem>
           </div>
         </List>
@@ -90,18 +118,29 @@ class App extends React.Component {
         >
           {sideNavList}
         </SwipeableDrawer>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" className={classes.grow}>
-              Personal Feed
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              { this.state.activeTab === 0 && 'Top Stories' }
+              { this.state.activeTab === 1 && 'Recommended For You' }
+              { this.state.activeTab === 2 && 'About Me' }
             </Typography>
           </Toolbar>
         </AppBar>
-        {/* TODO: set up different page here, with routes */}
-        <Feed />
+        {
+          // TODO: set up different page here, with routes 
+          // Replace <Feed /> with <TopStories /> & <Recommended />
+          // add tab state to local store
+          // <Feed />
+        }
+        <div style={{ paddingTop: 56 }}>
+          { this.state.activeTab === 0 && <TopStories /> }
+          { this.state.activeTab === 1 && <p>Recommended For You</p> }
+          { this.state.activeTab === 2 && <p>About Me</p> }
+        </div>
       </div>
     );
   }

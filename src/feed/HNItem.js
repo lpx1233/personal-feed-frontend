@@ -42,7 +42,7 @@ class HNItem extends React.Component {
             Hacker News
           </Typography>
           {this.props.title !== undefined &&
-            <Typography variant="headline" component="h2">
+            <Typography variant="h5" component="h2">
               {this.props.title}
             </Typography>
           }
