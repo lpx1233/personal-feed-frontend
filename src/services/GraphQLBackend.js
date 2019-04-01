@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { persistCache } from 'apollo-cache-persist';
+import config from '../config/config.json';
 
 const cache = new InMemoryCache();
 
@@ -17,7 +18,7 @@ const defaults = {
 
 export const client = new ApolloClient({
   cache,
-  uri: 'http://52.221.217.26:8080/graphql',
+  uri: config.backendGraphQLEndpoint,
   clientState: {
     defaults,
     // resolver & typedef are omitted now
